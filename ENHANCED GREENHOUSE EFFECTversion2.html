@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade 10 Science: Enhanced Greenhouse Effect LMS</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        .tab-active { border-bottom: 2px solid #22c55e; color: #22c55e; font-weight: 600; }
+        .drag-over { border-color: #22c55e !important; background-color: rgba(34, 197, 94, 0.1) !important; }
+    </style>
+</head>
+<body class="h-full flex flex-col font-sans antialiased overflow-x-hidden selection:bg-brand-500 selection:text-white">
+
+    <!-- TOP HEADER / NAV -->
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand / Title -->
+                <div class="flex items-center space-x-3">
+                    <div class="p-2 bg-brand-500/10 text-brand-500 rounded-lg border border-brand-500/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg text-white leading-none">ILAW Interactive LMS</h1>
+                        <p class="text-xs text-slate-400 mt-0.5">DepEd Grade 10 Science • 5E Model</p>
+                    </div>
+                </div>
+
+                <!-- Progress Bar & Sound Toggle -->
+                <div class="flex items-center space-x-6">
+                    <div class="hidden md:flex flex-col items-end min-w-[160px]">
+                        <div class="flex justify-between w-full text-xs text-slate-400 mb-1">
+                            <span>Lesson Progress</span>
+                            <span id="overall-progress-text" class="font-semibold text-brand-500">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700">
+                            <div id="overall-progress-bar" class="bg-brand-500 h-full w-0 transition-all duration-500"></div>
+                        </div>
+                    </div>
+
+                    <button id="sfx-toggle" onclick="toggleAudio()" class="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 transition" title="Toggle Sound SFX">
+                        <svg id="sfx-icon-on" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+                        <svg id="sfx-icon-off" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5E Navigation Tabs -->
+        <div class="bg-slate-900/80 border-t border-slate-800 backdrop-blur">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav class="flex space-x-1 overflow-x-auto py-2 no-scrollbar" id="5e-tabs">
+                    <button onclick="switchTab('engage')" id="tab-engage" class="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition whitespace-nowrap">
+                        <span class="w-5 h-5 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs">1</span>
+                        <span>Engage</span>
+                    </button>
+                    <button onclick="switchTab('explore')" id="tab-explore" class="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition whitespace-nowrap">
+                        <span class="w-5 h-5 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs">2</span>
+                        <span>Explore</span>
+                    </button>
+                    <button onclick="switchTab('explain')" id="tab-explain" class="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition whitespace-nowrap">
+                        <span class="w-5 h-5 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs">3</span>
+                        <span>Explain</span>
+                    </button>
+                    <button onclick="switchTab('elaborate')" id="tab-elaborate" class="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition whitespace-nowrap">
+                        <span class="w-5 h-5 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs">4</span>
+                        <span>Elaborate</span>
+                    </button>
+                    <button onclick="switchTab('evaluate')" id="tab-evaluate" class="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition whitespace-nowrap">
+                        <span class="w-5 h-5 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs">5</span>
+                        <span>Evaluate</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col space-y-6">
+
+        <!-- LESSON OBJECTIVES BANNER -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg">
+            <div class="flex items-center gap-2 mb-3">
+                <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <h2 class="text-sm font-bold uppercase tracking-wider text-slate-200">Learning Objectives</h2>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs text-slate-300">
+                <div class="bg-slate-950 p-3 rounded-lg border border-slate-800/80 flex items-start gap-2">
+                    <span class="font-bold text-brand-500">1.</span>
+                    <span>Define greenhouse gases and the enhanced greenhouse effect.</span>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-lg border border-slate-800/80 flex items-start gap-2">
+                    <span class="font-bold text-brand-500">2.</span>
+                    <span>Identify major greenhouse gases and their anthropogenic sources.</span>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-lg border border-slate-800/80 flex items-start gap-2">
+                    <span class="font-bold text-brand-500">3.</span>
+                    <span>Explain how excess greenhouse gases drive global warming and climate change.</span>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-lg border border-slate-800/80 flex items-start gap-2">
+                    <span class="font-bold text-brand-500">4.</span>
+                    <span>Complete a cause-and-effect flowchart connecting human action to global shifts.</span>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-lg border border-slate-800/80 flex items-start gap-2 sm:col-span-2 md:col-span-2">
+                    <span class="font-bold text-brand-500">5.</span>
+                    <span>Propose practical mitigation steps for home, school, and local community.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 1. ENGAGE SECTION ================= -->
+        <section id="sec-engage" class="space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-brand-500">Phase 1 • 10 Minutes</span>
+                        <h2 class="text-2xl font-bold text-white mt-1">What's Causing the Heat?</h2>
+                    </div>
+                    <span class="px-3 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs rounded-full font-medium">Warm-Up Activity</span>
+                </div>
+
+                <p class="text-slate-300 mb-6">Observe the human activities and environmental phenomena below. Click on each card to investigate how these specific activities impact Earth's atmosphere.</p>
+
+                <!-- Cards Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <!-- Card 1 -->
+                    <div onclick="engageClick('traffic')" class="bg-slate-950 border border-slate-800 hover:border-brand-500/50 rounded-xl p-4 cursor-pointer transition-all hover:-translate-y-1 group">
+                        <div class="w-full h-28 bg-slate-900 rounded-lg mb-3 flex items-center justify-center border border-slate-800 group-hover:bg-brand-500/5">
+                            <svg class="w-10 h-10 text-slate-500 group-hover:text-brand-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7h8m-8 4h8m-4 4h4m-8 0H4a1 1 0 01-1-1V5a1 1 0 011-1h16a1 1 0 011 1v10a1 1 0 01-1 1h-3l-4 4z"/></svg>
+                        </div>
+                        <h3 class="font-semibold text-slate-200 group-hover:text-brand-500 text-sm">Heavy Traffic</h3>
+                        <p class="text-xs text-slate-400 mt-1">Vehicle exhaust & urban transport congestion.</p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div onclick="engageClick('factory')" class="bg-slate-950 border border-slate-800 hover:border-brand-500/50 rounded-xl p-4 cursor-pointer transition-all hover:-translate-y-1 group">
+                        <div class="w-full h-28 bg-slate-900 rounded-lg mb-3 flex items-center justify-center border border-slate-800 group-hover:bg-brand-500/5">
+                            <svg class="w-10 h-10 text-slate-500 group-hover:text-brand-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h5m-5 0V11m0 0h5m-5 0H7"/></svg>
+                        </div>
+                        <h3 class="font-semibold text-slate-200 group-hover:text-brand-500 text-sm">Factory Emissions</h3>
+                        <p class="text-xs text-slate-400 mt-1">Industrial power generation & manufacturing fumes.</p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div onclick="engageClick('farm')" class="bg-slate-950 border border-slate-800 hover:border-brand-500/50 rounded-xl p-4 cursor-pointer transition-all hover:-translate-y-1 group">
+                        <div class="w-full h-28 bg-slate-900 rounded-lg mb-3 flex items-center justify-center border border-slate-800 group-hover:bg-brand-500/5">
+                            <svg class="w-10 h-10 text-slate-500 group-hover:text-brand-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h1.5a2.5 2.5 0 002.5-2.5V14M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <h3 class="font-semibold text-slate-200 group-hover:text-brand-500 text-sm">Livestock Farms</h3>
+                        <p class="text-xs text-slate-400 mt-1">Cattle farming, manure management & landfills.</p>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div onclick="engageClick('forest')" class="bg-slate-950 border border-slate-800 hover:border-brand-500/50 rounded-xl p-4 cursor-pointer transition-all hover:-translate-y-1 group">
+                        <div class="w-full h-28 bg-slate-900 rounded-lg mb-3 flex items-center justify-center border border-slate-800 group-hover:bg-brand-500/5">
+                            <svg class="w-10 h-10 text-slate-500 group-hover:text-brand-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                        </div>
+                        <h3 class="font-semibold text-slate-200 group-hover:text-brand-500 text-sm">Deforestation</h3>
+                        <p class="text-xs text-slate-400 mt-1">Tree cutting, forest clearance & biomass burning.</p>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div onclick="engageClick('heatwave')" class="bg-slate-950 border border-slate-800 hover:border-brand-500/50 rounded-xl p-4 cursor-pointer transition-all hover:-translate-y-1 group">
+                        <div class="w-full h-28 bg-slate-900 rounded-lg mb-3 flex items-center justify-center border border-slate-800 group-hover:bg-brand-500/5">
+                            <svg class="w-10 h-10 text-slate-500 group-hover:text-brand-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707 M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                        </div>
+                        <h3 class="font-semibold text-slate-200 group-hover:text-brand-500 text-sm">Heatwaves</h3>
+                        <p class="text-xs text-slate-400 mt-1">Extreme weather events & soaring global temperatures.</p>
+                    </div>
+                </div>
+
+                <!-- GUIDE QUESTIONS -->
+                <div class="mt-6 bg-slate-950 border border-slate-800 rounded-xl p-4">
+                    <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Guide Questions
+                    </h4>
+                    <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                        <li>What common activity or human practice do you observe in these images?</li>
+                        <li>How might these human activities alter or affect the composition of our atmosphere?</li>
+                        <li>Why is the Earth getting progressively warmer over recent decades?</li>
+                    </ul>
+                </div>
+
+                <!-- MOTIVATING QUESTION & REFLECTION -->
+                <div class="mt-4 bg-slate-950 border border-brand-500/30 rounded-xl p-6">
+                    <h3 class="text-md font-bold text-brand-400 mb-1 flex items-center gap-2">
+                        <span>Motivating Question</span>
+                    </h3>
+                    <p class="text-sm font-semibold text-slate-200 mb-3">"If Earth continues to get warmer, how might this affect our lives, communities, and future environment?"</p>
+                    <textarea id="engage-reflection" rows="3" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500 transition" placeholder="Type your personal thoughts or observations from your local community..."></textarea>
+                    <div class="flex justify-between items-center mt-3">
+                        <span id="engage-status" class="text-xs text-slate-500">Click image cards above to log observations.</span>
+                        <button onclick="saveEngageReflection()" class="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-sm font-medium transition shadow-lg shadow-brand-600/20">Submit Reflection & Continue</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 2. EXPLORE SECTION ================= -->
+        <section id="sec-explore" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-brand-500">Phase 2 • 15 Minutes</span>
+                        <h2 class="text-2xl font-bold text-white mt-1">Greenhouse Gas Source Matching</h2>
+                    </div>
+                    <span class="px-3 py-1 bg-sky-500/10 text-sky-400 border border-sky-500/20 text-xs rounded-full font-medium">Interactive Matching Game</span>
+                </div>
+
+                <p class="text-slate-300 mb-6">Match each major greenhouse gas with its corresponding primary anthropogenic (human-caused) source. Drag cards into their correct drop zones, or tap to pair.</p>
+
+                <!-- Matching Interface -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- Drop Zones (Gases) -->
+                    <div class="space-y-4">
+                        <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Greenhouse Gases</h3>
+
+                        <div data-gas="CO2" class="match-dropzone bg-slate-950 border-2 border-dashed border-slate-800 rounded-xl p-4 transition-all flex items-center justify-between">
+                            <div>
+                                <h4 class="font-bold text-lg text-white">Carbon Dioxide <span class="text-xs text-brand-500 font-mono">(CO₂)</span></h4>
+                                <p class="text-xs text-slate-400">Primary long-lived atmospheric driver</p>
+                            </div>
+                            <div class="drop-target min-w-[160px] h-12 bg-slate-900 rounded-lg border border-slate-800 flex items-center justify-center text-xs text-slate-500 px-2 text-center">
+                                Drop Source Here
+                            </div>
+                        </div>
+
+                        <div data-gas="CH4" class="match-dropzone bg-slate-950 border-2 border-dashed border-slate-800 rounded-xl p-4 transition-all flex items-center justify-between">
+                            <div>
+                                <h4 class="font-bold text-lg text-white">Methane <span class="text-xs text-brand-500 font-mono">(CH₄)</span></h4>
+                                <p class="text-xs text-slate-400">Potent short-lived climate pollutant</p>
+                            </div>
+                            <div class="drop-target min-w-[160px] h-12 bg-slate-900 rounded-lg border border-slate-800 flex items-center justify-center text-xs text-slate-500 px-2 text-center">
+                                Drop Source Here
+                            </div>
+                        </div>
+
+                        <div data-gas="N2O" class="match-dropzone bg-slate-950 border-2 border-dashed border-slate-800 rounded-xl p-4 transition-all flex items-center justify-between">
+                            <div>
+                                <h4 class="font-bold text-lg text-white">Nitrous Oxide <span class="text-xs text-brand-500 font-mono">(N₂O)</span></h4>
+                                <p class="text-xs text-slate-400">Agricultural & chemical byproduct</p>
+                            </div>
+                            <div class="drop-target min-w-[160px] h-12 bg-slate-900 rounded-lg border border-slate-800 flex items-center justify-center text-xs text-slate-500 px-2 text-center">
+                                Drop Source Here
+                            </div>
+                        </div>
+
+                        <div data-gas="FGASES" class="match-dropzone bg-slate-950 border-2 border-dashed border-slate-800 rounded-xl p-4 transition-all flex items-center justify-between">
+                            <div>
+                                <h4 class="font-bold text-lg text-white">Fluorinated Gases</h4>
+                                <p class="text-xs text-slate-400">Synthetic high-GWP industrial gases</p>
+                            </div>
+                            <div class="drop-target min-w-[160px] h-12 bg-slate-900 rounded-lg border border-slate-800 flex items-center justify-center text-xs text-slate-500 px-2 text-center">
+                                Drop Source Here
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Draggable Sources -->
+                    <div>
+                        <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Available Sources</h3>
+                        <div id="drag-sources-container" class="grid grid-cols-1 gap-3">
+                            <div draggable="true" id="src-vehicles" data-match="CO2" class="draggable-card bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg p-3 text-sm font-medium text-slate-200 cursor-grab active:cursor-grabbing flex items-center justify-between shadow">
+                                <span>Vehicles and Factories</span>
+                                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                            </div>
+
+                            <div draggable="true" id="src-livestock" data-match="CH4" class="draggable-card bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg p-3 text-sm font-medium text-slate-200 cursor-grab active:cursor-grabbing flex items-center justify-between shadow">
+                                <span>Livestock and Landfills</span>
+                                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                            </div>
+
+                            <div draggable="true" id="src-fertilizer" data-match="N2O" class="draggable-card bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg p-3 text-sm font-medium text-slate-200 cursor-grab active:cursor-grabbing flex items-center justify-between shadow">
+                                <span>Fertilizers and Agriculture</span>
+                                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                            </div>
+
+                            <div draggable="true" id="src-refrigerants" data-match="FGASES" class="draggable-card bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg p-3 text-sm font-medium text-slate-200 cursor-grab active:cursor-grabbing flex items-center justify-between shadow">
+                                <span>Refrigerators and Air Conditioners</span>
+                                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                            </div>
+                        </div>
+
+                        <!-- Processing Check Button -->
+                        <div class="mt-6 p-4 bg-slate-950 rounded-xl border border-slate-800">
+                            <button onclick="checkExploreMatching()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-sm font-medium transition shadow-lg shadow-brand-600/20 flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Check Matching Answers
+                            </button>
+                            <p id="explore-feedback" class="text-xs text-center mt-3 text-slate-400"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROCESSING QUESTIONS -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+                    <h4 class="text-xs font-bold text-sky-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                        Processing Questions
+                    </h4>
+                    <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                        <li>Which primary greenhouse gas is heavily emitted by motor vehicles and industrial factories?</li>
+                        <li>Which greenhouse gas is mainly associated with livestock farming, agriculture, and organic waste in landfills?</li>
+                        <li>Which greenhouse gas emission is directly produced by synthetic agricultural fertilizers?</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 3. EXPLAIN SECTION ================= -->
+        <section id="sec-explain" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-brand-500">Phase 3 • 15 Minutes</span>
+                        <h2 class="text-2xl font-bold text-white mt-1">Interactive Radiation Simulation</h2>
+                    </div>
+                    <span class="px-3 py-1 bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs rounded-full font-medium">Abstraction & Visual Model</span>
+                </div>
+
+                <!-- Simulation Canvas & Control Panel -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Canvas Box -->
+                    <div class="lg:col-span-2 bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col items-center justify-center relative overflow-hidden">
+                        <canvas id="simCanvas" width="600" height="400" class="w-full h-auto bg-slate-950 rounded-lg border border-slate-900"></canvas>
+                        <div class="absolute top-6 left-6 bg-slate-900/90 backdrop-blur border border-slate-800 rounded-lg px-3 py-2 text-xs">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="w-3 h-3 rounded-full bg-yellow-400 inline-block"></span>
+                                <span class="text-slate-300">Solar Radiation (Shortwave)</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                                <span class="text-slate-300">Infrared Radiation (Longwave/Heat)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Controls -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2">Atmospheric Blanket</h3>
+                            <p class="text-xs text-slate-400 mb-6">Adjust greenhouse gas concentration levels to observe how thermal heat trapping leads to enhanced global warming.</p>
+
+                            <!-- Slider -->
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <label class="text-sm font-medium text-slate-300">GHG Concentration</label>
+                                    <span id="ghg-val-display" class="font-mono text-sm font-bold text-brand-500">Natural (300 ppm)</span>
+                                </div>
+                                <input type="range" id="ghgSlider" min="0" max="100" value="25" oninput="updateSimParams(this.value)" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-brand-500">
+
+                                <!-- Gauge Readouts -->
+                                <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-slate-800">
+                                    <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 text-center">
+                                        <span class="text-xs text-slate-500 block">Avg Temperature</span>
+                                        <span id="sim-temp-display" class="text-xl font-bold text-amber-400 font-mono">15.0 °C</span>
+                                    </div>
+                                    <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 text-center">
+                                        <span class="text-xs text-slate-500 block">Trapped Heat %</span>
+                                        <span id="sim-trapped-display" class="text-xl font-bold text-red-400 font-mono">25%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-slate-800">
+                            <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Key takeaway</h4>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Natural GHGs keep Earth at a habitable average of ~15°C. Human activities pump excess GHGs, creating an <span class="text-brand-400 font-semibold">Enhanced Greenhouse Effect</span> that traps disproportionate heat.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROCESSING QUESTIONS -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+                    <h4 class="text-xs font-bold text-purple-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Discussion & Processing Questions
+                    </h4>
+                    <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                        <li>Why are greenhouse gases naturally important for sustaining life on Earth?</li>
+                        <li>What happens to atmospheric temperature when human activities drastically increase GHG levels?</li>
+                        <li>How is the enhanced greenhouse effect directly related to global warming and climate change?</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 4. ELABORATE SECTION ================= -->
+        <section id="sec-elaborate" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-brand-500">Phase 4 • 10 Minutes</span>
+                        <h2 class="text-2xl font-bold text-white mt-1">Complete the Climate Change Chain</h2>
+                    </div>
+                    <span class="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs rounded-full font-medium">Flowchart & Practical Action</span>
+                </div>
+
+                <!-- Cause and Effect Flowchart -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-6 mb-6">
+                    <h3 class="text-md font-bold text-white mb-4">1. Cause-and-Effect Chain</h3>
+                    <p class="text-xs text-slate-400 mb-6">Fill in the missing links to complete the cause-and-effect relationship between human activities and climate change.</p>
+
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-3 text-center">
+                        <div class="w-full md:w-1/5 bg-slate-900 border border-slate-800 p-3 rounded-lg text-sm font-semibold text-slate-300">
+                            Burning Fossil Fuels
+                        </div>
+                        <svg class="w-6 h-6 text-brand-500 transform rotate-90 md:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+
+                        <!-- Fill 1 -->
+                        <div class="w-full md:w-1/5">
+                            <select id="chain-step-1" class="w-full bg-slate-900 border border-brand-500/40 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500">
+                                <option value="">-- Select Concept --</option>
+                                <option value="increased_ghg">Increased Greenhouse Gases</option>
+                                <option value="ozone_depletion">Ozone Layer Depletion</option>
+                                <option value="acid_rain">Acid Rain Formation</option>
+                            </select>
+                        </div>
+                        <svg class="w-6 h-6 text-brand-500 transform rotate-90 md:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+
+                        <div class="w-full md:w-1/5 bg-slate-900 border border-slate-800 p-3 rounded-lg text-sm font-semibold text-slate-300">
+                            More Heat Trapped
+                        </div>
+                        <svg class="w-6 h-6 text-brand-500 transform rotate-90 md:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+
+                        <!-- Fill 2 -->
+                        <div class="w-full md:w-1/5">
+                            <select id="chain-step-2" class="w-full bg-slate-900 border border-brand-500/40 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500">
+                                <option value="">-- Select Concept --</option>
+                                <option value="global_warming">Global Warming</option>
+                                <option value="volcanic_eruption">Volcanic Eruption</option>
+                                <option value="solar_flare">Solar Flare Increase</option>
+                            </select>
+                        </div>
+                        <svg class="w-6 h-6 text-brand-500 transform rotate-90 md:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+
+                        <div class="w-full md:w-1/5 bg-slate-900 border border-slate-800 p-3 rounded-lg text-sm font-semibold text-slate-300">
+                            Climate Change
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex justify-end">
+                        <button onclick="checkElaborateChain()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 rounded-lg text-xs font-medium transition">Validate Chain</button>
+                    </div>
+                </div>
+
+                <!-- Practical Action Plan Proposal -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-6 mb-6">
+                    <h3 class="text-md font-bold text-white mb-2">2. Home & Community Action Plan Proposal</h3>
+                    <p class="text-xs text-slate-400 mb-4">Propose practical, everyday actions your family and community can adopt to conserve energy and reduce emissions.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <label class="text-xs font-semibold text-slate-300 block mb-1">Energy Conservation (Home)</label>
+                            <input id="action-home" type="text" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500" placeholder="e.g., Unplugging appliances, using LED bulbs...">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold text-slate-300 block mb-1">Waste Reduction (School)</label>
+                            <input id="action-school" type="text" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500" placeholder="e.g., Proper waste segregation, composting...">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold text-slate-300 block mb-1">Greening & Transport (Community)</label>
+                            <input id="action-community" type="text" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500" placeholder="e.g., Tree planting, biking, carpooling...">
+                        </div>
+                    </div>
+                    <button onclick="saveElaborateActions()" class="w-full py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-xs font-medium transition shadow-lg shadow-brand-600/20">Save Action Plan</button>
+                </div>
+
+                <!-- PROCESSING / REFLECTION QUESTION -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+                    <h4 class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Reflection Question
+                    </h4>
+                    <p class="text-xs text-slate-300">"How can your family specifically lower greenhouse gas emissions at home without incurring large financial costs?"</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 5. EVALUATE SECTION ================= -->
+        <section id="sec-evaluate" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-brand-500">Phase 5 • 5 Minutes</span>
+                        <h2 class="text-2xl font-bold text-white mt-1">Formative Assessment Exit Ticket</h2>
+                    </div>
+                    <span class="px-3 py-1 bg-rose-500/10 text-rose-400 border border-rose-500/20 text-xs rounded-full font-medium">Interactive Quiz</span>
+                </div>
+
+                <div id="quiz-container" class="space-y-6">
+                    <!-- Q1 -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
+                        <p class="font-semibold text-slate-200 text-sm mb-3">1. What are greenhouse gases?</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3 p-3 bg-slate-900 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700">
+                                <input type="radio" name="q1" value="A" class="accent-brand-500">
+                                <span class="text-xs text-slate-300">Gases in the atmosphere that trap heat and help maintain Earth's temperature.</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-slate-900 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700">
+                                <input type="radio" name="q1" value="B" class="accent-brand-500">
+                                <span class="text-xs text-slate-300">Toxic pollutants that destroy the oxygen layer directly.</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-slate-900 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700">
+                                <input type="radio" name="q1" value="C" class="accent-brand-500">
+                                <span class="text-xs text-slate-300">Synthetic chemicals used exclusively in agricultural fertilizers.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
+                        <p class="font-semibold text-slate-200 text-sm mb-3">2. Which of the following lists contains TWO major greenhouse gases?</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3 p-3 bg-slate-900 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700">
+                                <input type="radio" name="q2" value="A" class="accent-brand-500">
+                                <span class="text-xs text-slate-300">Oxygen (O₂) and Nitrogen (N₂)</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-slate-900 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700">
+                                <input type="radio" name="q2" value="B" class="accent-brand-500">
+                                <span class="text-xs text-slate-300">Carbon Dioxide (CO₂) and Methane (CH₄)</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-slate-900 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700">
+                                <input type="radio" name="q2" value="C" class="accent-brand-500">
+                                <span class="text-xs text-slate-300">Helium (He) and Argon (Ar)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
+                        <p class="font-semibold text-slate-200 text-sm mb-3">3. Which greenhouse gas is primarily released by motor vehicles and burning fossil fuels?</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3 p-3 bg-slate-900 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700">
+                                <input type="radio" name="q3" value="A" class="accent-brand-500">
+                                <span class="text-xs text-slate-300">Carbon Dioxide (CO₂)</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-slate-900 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700">
+                                <input type="radio" name="q3" value="B" class="accent-brand-500">
+                                <span class="text-xs text-slate-300">Methane (CH₄)</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-slate-900 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700">
+                                <input type="radio" name="q3" value="C" class="accent-brand-500">
+                                <span class="text-xs text-slate-300">Fluorinated Gases</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
+                        <p class="font-semibold text-slate-200 text-sm mb-3">4. What is the ENHANCED greenhouse effect?</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3 p-3 bg-slate-900 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700">
+                                <input type="radio" name="q4" value="A" class="accent-brand-500">
+                                <span class="text-xs text-slate-300">The natural warming process that keeps Earth habitable for living organisms.</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-slate-900 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700">
+                                <input type="radio" name="q4" value="B" class="accent-brand-500">
+                                <span class="text-xs text-slate-300">Excess heat trapped due to increased greenhouse gases from human activities.</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-slate-900 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700">
+                                <input type="radio" name="q4" value="C" class="accent-brand-500">
+                                <span class="text-xs text-slate-300">The cooling of Earth's atmosphere caused by synthetic industrial gases.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
+                        <p class="font-semibold text-slate-200 text-sm mb-3">5. How do greenhouse gases contribute to climate change?</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3 p-3 bg-slate-900 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700">
+                                <input type="radio" name="q5" value="A" class="accent-brand-500">
+                                <span class="text-xs text-slate-300">By reflecting all incoming sunlight back into space before it reaches the surface.</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-slate-900 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700">
+                                <input type="radio" name="q5" value="B" class="accent-brand-500">
+                                <span class="text-xs text-slate-300">By trapping re-radiated infrared heat in the atmosphere, driving global warming and shifting weather patterns.</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-slate-900 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700">
+                                <input type="radio" name="q5" value="C" class="accent-brand-500">
+                                <span class="text-xs text-slate-300">By absorbing ocean water and decreasing atmospheric humidity levels globally.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button & Final Score Card -->
+                    <div class="pt-4 border-t border-slate-800">
+                        <button onclick="submitQuiz()" class="w-full py-3 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl transition shadow-lg shadow-brand-600/20 flex items-center justify-center gap-2">
+                            Submit Exit Ticket Answers
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Score Modal / Box -->
+                <div id="score-result" class="hidden mt-6 bg-slate-950 border border-brand-500/30 rounded-xl p-6 text-center">
+                    <h3 class="text-xl font-bold text-white mb-2">Assessment Results</h3>
+                    <p class="text-3xl font-extrabold text-brand-500 my-2" id="score-display">0 / 5</p>
+                    <p class="text-xs text-slate-400 mb-4" id="score-message"></p>
+                    <button onclick="resetQuiz()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-lg transition">Retake Quiz</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-4 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-2">
+            <div>
+                <span>Aligned with DepEd DO 3, s. 2026 Annex A • Science 10</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span>100% Offline Single-File Application</span>
+                <span>•</span>
+                <span>Web Audio SFX Enabled</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WEB AUDIO API SFX ENGINE & APP JS -->
+    <script>
+        // ================= WEB AUDIO API SFX ENGINE =================
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function toggleAudio() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('sfx-icon-on').classList.toggle('hidden', !soundEnabled);
+            document.getElementById('sfx-icon-off').classList.toggle('hidden', soundEnabled);
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(200, now + 0.05);
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            } else if (type === 'correct') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
+                osc.start(now);
+                osc.stop(now + 0.25);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.linearRampToValueAtTime(110, now + 0.2);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+                osc.start(now);
+                osc.stop(now + 0.2);
+            } else if (type === 'win') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(440, now);
+                osc.frequency.setValueAtTime(554.37, now + 0.1);
+                osc.frequency.setValueAtTime(659.25, now + 0.2);
+                osc.frequency.setValueAtTime(880, now + 0.3);
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            }
+        }
+
+        // ================= PROGRESS TRACKING =================
+        const sectionProgress = {
+            engage: false,
+            explore: false,
+            explain: false,
+            elaborate: false,
+            evaluate: false
+        };
+
+        function updateProgress(section) {
+            sectionProgress[section] = true;
+            const completed = Object.values(sectionProgress).filter(Boolean).length;
+            const pct = Math.round((completed / 5) * 100);
+            document.getElementById('overall-progress-bar').style.width = pct + '%';
+            document.getElementById('overall-progress-text').innerText = pct + '%';
+        }
+
+        // ================= NAVIGATION TABS =================
+        function switchTab(tabId) {
+            playSound('click');
+            ['engage', 'explore', 'explain', 'elaborate', 'evaluate'].forEach(sec => {
+                document.getElementById('sec-' + sec).classList.add('hidden');
+                document.getElementById('tab-' + sec).classList.remove('tab-active', 'bg-slate-800', 'text-brand-500');
+            });
+
+            document.getElementById('sec-' + tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('tab-' + tabId);
+            activeBtn.classList.add('tab-active', 'text-brand-500');
+
+            if (tabId === 'explain') {
+                initSimCanvas();
+            }
+        }
+
+        // ================= ENGAGE PHASE JS =================
+        function engageClick(type) {
+            playSound('click');
+            const status = document.getElementById('engage-status');
+            const messages = {
+                traffic: "Heavy Traffic: Releasing high volumes of CO₂ from fuel combustion.",
+                factory: "Factory Emissions: Industrial burning of fossil fuels emitting CO₂ and N₂O.",
+                farm: "Livestock Farms: Ruminant livestock enteric fermentation generating Methane (CH₄).",
+                forest: "Deforestation: Loss of carbon sinks and carbon release upon biomass burning.",
+                heatwave: "Heatwaves: Consequence of prolonged atmospheric thermal radiation trapping."
+            };
+            status.innerText = messages[type] || "";
+            status.classList.add('text-brand-400');
+        }
+
+        function saveEngageReflection() {
+            const val = document.getElementById('engage-reflection').value.trim();
+            if (!val) {
+                alert("Please enter a short reflection before proceeding.");
+                return;
+            }
+            playSound('correct');
+            updateProgress('engage');
+            switchTab('explore');
+        }
+
+        // ================= EXPLORE PHASE JS =================
+        let exploreMatches = {};
+
+        function initExploreDragDrop() {
+            const draggables = document.querySelectorAll('.draggable-card');
+            const dropzones = document.querySelectorAll('.match-dropzone');
+
+            draggables.forEach(card => {
+                card.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('text/plain', card.id);
+                    playSound('click');
+                });
+            });
+
+            dropzones.forEach(zone => {
+                zone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    zone.classList.add('drag-over');
+                });
+
+                zone.addEventListener('dragleave', () => {
+                    zone.classList.remove('drag-over');
+                });
+
+                zone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    zone.classList.remove('drag-over');
+                    const cardId = e.dataTransfer.getData('text/plain');
+                    const card = document.getElementById(cardId);
+                    if (!card) return;
+
+                    const gas = zone.getAttribute('data-gas');
+                    const target = zone.querySelector('.drop-target');
+
+                    target.innerHTML = card.innerText;
+                    target.classList.remove('text-slate-500');
+                    target.classList.add('bg-slate-800', 'text-brand-400', 'font-semibold');
+
+                    exploreMatches[gas] = card.getAttribute('data-match');
+                    playSound('click');
+                });
+            });
+        }
+
+        function checkExploreMatching() {
+            let correctCount = 0;
+            const expected = { CO2: 'CO2', CH4: 'CH4', N2O: 'N2O', FGASES: 'FGASES' };
+
+            Object.keys(expected).forEach(gas => {
+                if (exploreMatches[gas] === expected[gas]) {
+                    correctCount++;
+                }
+            });
+
+            const feedback = document.getElementById('explore-feedback');
+
+            if (correctCount === 4) {
+                playSound('correct');
+                feedback.className = "text-xs text-center mt-3 text-brand-400 font-bold";
+                feedback.innerText = "Excellent! All 4 greenhouse gases correctly matched to their sources.";
+                updateProgress('explore');
+            } else {
+                playSound('wrong');
+                feedback.className = "text-xs text-center mt-3 text-rose-400 font-semibold";
+                feedback.innerText = `You matched ${correctCount}/4 correctly. Try adjusting your answers!`;
+            }
+        }
+
+        // ================= EXPLAIN PHASE SIMULATION =================
+        let simCanvas, simCtx;
+        let particles = [];
+        let ghgLevel = 25;
+        let simRunning = false;
+
+        function initSimCanvas() {
+            simCanvas = document.getElementById('simCanvas');
+            if (!simCanvas) return;
+            simCtx = simCanvas.getContext('2d');
+            
+            if (!simRunning) {
+                simRunning = true;
+                createParticles();
+                requestAnimationFrame(simLoop);
+                updateProgress('explain');
+            }
+        }
+
+        function updateSimParams(val) {
+            ghgLevel = parseInt(val);
+            const display = document.getElementById('ghg-val-display');
+            const tempDisp = document.getElementById('sim-temp-display');
+            const trappedDisp = document.getElementById('sim-trapped-display');
+
+            // Math calculations
+            const temp = (15 + (ghgLevel * 0.12)).toFixed(1);
+            const trapped = Math.round(20 + (ghgLevel * 0.7));
+
+            tempDisp.innerText = temp + " °C";
+            trappedDisp.innerText = trapped + "%";
+
+            if (ghgLevel < 35) display.innerText = "Natural (300-350 ppm)";
+            else if (ghgLevel < 70) display.innerText = "Moderate (400-550 ppm)";
+            else display.innerText = "Enhanced High (700+ ppm)";
+        }
+
+        function createParticles() {
+            particles = [];
+            for (let i = 0; i < 30; i++) {
+                particles.push({
+                    x: Math.random() * simCanvas.width,
+                    y: Math.random() * 150,
+                    type: 'sun', // sun (yellow) or heat (red)
+                    vy: 2 + Math.random() * 2,
+                    vx: (Math.random() - 0.5) * 2
+                });
+            }
+        }
+
+        function simLoop() {
+            if (!simCtx) return;
+            simCtx.clearRect(0, 0, simCanvas.width, simCanvas.height);
+
+            // Draw Sky & Atmosphere Blanket Layer
+            simCtx.fillStyle = '#090d16';
+            simCtx.fillRect(0, 0, simCanvas.width, simCanvas.height);
+
+            // Atmosphere GHG Blanket Layer
+            const opacity = 0.1 + (ghgLevel / 100) * 0.5;
+            simCtx.fillStyle = `rgba(34, 197, 94, ${opacity})`;
+            simCtx.fillRect(0, 80, simCanvas.width, 100);
+
+            simCtx.fillStyle = '#94a3b8';
+            simCtx.font = '10px sans-serif';
+            simCtx.fillText('Atmospheric GHG Blanket', 10, 95);
+
+            // Earth Surface
+            simCtx.fillStyle = '#1e3a8a';
+            simCtx.fillRect(0, simCanvas.height - 40, simCanvas.width, 40);
+            simCtx.fillStyle = '#22c55e';
+            simCtx.fillRect(100, simCanvas.height - 40, 200, 40);
+            simCtx.fillRect(400, simCanvas.height - 40, 150, 40);
+
+            // Move & Render Radiation Rays/Particles
+            particles.forEach((p) => {
+                if (p.type === 'sun') {
+                    simCtx.fillStyle = '#facc15';
+                    simCtx.beginPath();
+                    simCtx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+                    simCtx.fill();
+
+                    p.y += p.vy;
+
+                    // Hit Earth Surface -> Converts to Infrared Heat
+                    if (p.y >= simCanvas.height - 40) {
+                        p.type = 'heat';
+                        p.vy = -(1.5 + Math.random() * 2);
+                    }
+                } else if (p.type === 'heat') {
+                    simCtx.fillStyle = '#ef4444';
+                    simCtx.beginPath();
+                    simCtx.arc(p.x, p.y, 3.5, 0, Math.PI * 2);
+                    simCtx.fill();
+
+                    p.y += p.vy;
+                    p.x += p.vx;
+
+                    // Atmosphere Reflection Check based on GHG Level
+                    if (p.y <= 180 && p.y >= 80) {
+                        const reflectChance = ghgLevel / 100;
+                        if (Math.random() < reflectChance * 0.1) {
+                            p.vy = -p.vy; // Reflected back down
+                        }
+                    }
+
+                    // Reset when off top screen
+                    if (p.y < 0) {
+                        p.type = 'sun';
+                        p.y = 0;
+                        p.x = Math.random() * simCanvas.width;
+                        p.vy = 2 + Math.random() * 2;
+                    }
+                }
+            });
+
+            requestAnimationFrame(simLoop);
+        }
+
+        // ================= ELABORATE PHASE JS =================
+        function checkElaborateChain() {
+            const step1 = document.getElementById('chain-step-1').value;
+            const step2 = document.getElementById('chain-step-2').value;
+
+            if (step1 === 'increased_ghg' && step2 === 'global_warming') {
+                playSound('correct');
+                alert("Correct! The chain is complete: Burning Fossil Fuels → Increased Greenhouse Gases → More Heat Trapped → Global Warming → Climate Change.");
+            } else {
+                playSound('wrong');
+                alert("Incorrect sequence. Think: What gas change happens right after fossil fuels burn, and what does trapped heat cause?");
+            }
+        }
+
+        function saveElaborateActions() {
+            const h = document.getElementById('action-home').value;
+            const s = document.getElementById('action-school').value;
+            const c = document.getElementById('action-community').value;
+
+            if (h && s && c) {
+                playSound('correct');
+                alert("Action Plan Successfully Saved!");
+                updateProgress('elaborate');
+                switchTab('evaluate');
+            } else {
+                alert("Please fill in proposals for all 3 categories.");
+            }
+        }
+
+        // ================= EVALUATE PHASE JS =================
+        const quizKey = {
+            q1: 'A',
+            q2: 'B',
+            q3: 'A',
+            q4: 'B',
+            q5: 'B'
+        };
+
+        function submitQuiz() {
+            let score = 0;
+            for (let i = 1; i <= 5; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selected && selected.value === quizKey[`q${i}`]) {
+                    score++;
+                }
+            }
+
+            const resultBox = document.getElementById('score-result');
+            const scoreDisplay = document.getElementById('score-display');
+            const scoreMessage = document.getElementById('score-message');
+
+            scoreDisplay.innerText = `${score} / 5`;
+            resultBox.classList.remove('hidden');
+
+            if (score >= 4) {
+                playSound('win');
+                scoreMessage.innerText = "Congratulations! You demonstrated a strong understanding of greenhouse gases and climate change.";
+            } else {
+                playSound('wrong');
+                scoreMessage.innerText = "Good effort! Review the Explain and Explore tabs, then retake the assessment.";
+            }
+
+            updateProgress('evaluate');
+        }
+
+        function resetQuiz() {
+            playSound('click');
+            document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+            document.getElementById('score-result').classList.add('hidden');
+        }
+
+        // Initialize drag and drop events on DOM load
+        document.addEventListener('DOMContentLoaded', () => {
+            initExploreDragDrop();
+            switchTab('engage');
+        });
+    </script>
+</body>
+</html>
